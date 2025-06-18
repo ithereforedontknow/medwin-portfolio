@@ -109,6 +109,9 @@ body {
     width: calc(100% - 20px);
     left: 0;
     transform: translateX(0);
+    align-items: center;
+    display: flex;
+    flex-direction: column;
   }
 
   .navbar.hide {
