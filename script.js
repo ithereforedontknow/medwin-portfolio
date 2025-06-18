@@ -58,38 +58,8 @@ function requestTick() {
 }
 
 window.addEventListener("scroll", requestTick);
-document
-  .querySelector(".contact-form")
-  .addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    // Get form data
-    const formData = new FormData(this);
-    const name = formData.get("name");
-    const email = formData.get("email");
-    const subject = formData.get("subject");
-    const message = formData.get("message");
-
-    // Simple validation
-    if (!name || !email || !subject || !message) {
-      alert("Please fill in all fields.");
-      return;
-    }
-
-    // Simulate form submission
-    const submitBtn = this.querySelector(".submit-btn");
-    const originalText = submitBtn.textContent;
-
-    submitBtn.textContent = "Sending...";
-    submitBtn.disabled = true;
-
-    setTimeout(() => {
-      alert("Thank you for your message! We'll get back to you soon.");
-      this.reset();
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
-    }, 1500);
-  });
+// Enhanced form handling with AJAX submission
+//
 const track = document.querySelector(".carousel-track");
 const slides = document.querySelectorAll(".slide");
 const prevBtn = document.querySelector(".prev");

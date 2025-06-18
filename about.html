@@ -16,14 +16,9 @@
       </div>
     </nav>
 
-    <!-- <img
-      src="about.jpg"
-      alt="background image"
-      class="heroimage"
-      style="width: 100%; height: auto"
-    /> -->
-    <section class="about-me">
-      <h2>About Me</h2>
+    <h2 class="about-me-title">About Me</h2>
+    <div class="about-me"></div>
+    <div class="about-me-content">
       <p>
         Born and raised in La Union, Philippines, my journey began in college,
         where I first stepped into the spotlight through pageantry in 2024. What
@@ -38,7 +33,7 @@
         under pressure, while my love for visual storytelling keeps me authentic
         and engaging in every frame.
       </p>
-    </section>
+    </div>
     <section class="content" id="contact">
       <div class="container">
         <div class="contact-header">
@@ -113,39 +108,12 @@
               </svg>
               <div class="info-details">
                 <h3>Email</h3>
-                <p>mdzdoctolero@gmail.com</p>
+                <a href="mailto:mdzdoctolero@gmail.com?subject=Website Inquiry">
+                  <p>mdzdoctolero@gmail.com</p>
+                </a>
               </div>
             </div>
           </div>
-
-          <form class="contact-form">
-            <div class="form-group">
-              <label for="name">Full Name</label>
-              <input type="text" id="name" name="name" required />
-            </div>
-
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" required />
-            </div>
-
-            <div class="form-group">
-              <label for="subject">Subject</label>
-              <input type="text" id="subject" name="subject" required />
-            </div>
-
-            <div class="form-group">
-              <label for="message">Message</label>
-              <textarea
-                id="message"
-                name="message"
-                placeholder="Tell us about your project or inquiry..."
-                required
-              ></textarea>
-            </div>
-
-            <button type="submit" class="submit-btn">Send Message</button>
-          </form>
         </div>
       </div>
     </section>
@@ -191,6 +159,38 @@
       }
 
       window.addEventListener("scroll", requestTick);
+      document
+        .querySelector(".contact-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Get form data
+          const formData = new FormData(this);
+          const name = formData.get("name");
+          const email = formData.get("email");
+          const subject = formData.get("subject");
+          const message = formData.get("message");
+
+          // Simple validation
+          if (!name || !email || !subject || !message) {
+            alert("Please fill in all fields.");
+            return;
+          }
+
+          // Simulate form submission
+          const submitBtn = this.querySelector(".submit-btn");
+          const originalText = submitBtn.textContent;
+
+          submitBtn.textContent = "Sending...";
+          submitBtn.disabled = true;
+
+          setTimeout(() => {
+            alert("Thank you for your message! We'll get back to you soon.");
+            this.reset();
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+          }, 1500);
+        });
     </script>
   </body>
 </html>
