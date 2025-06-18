@@ -215,12 +215,10 @@ body {
 .about-me-title {
   position: absolute;
   color: rgb(27, 27, 27);
-  font-size: 11.5rem;
-  margin-top: 140px;
+  font-size: 10rem;
   opacity: 0.9;
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  margin: 0 auto;
 }
 
 .about-me p {
