@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medwin Doctolero</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header></header>
+    <nav class="navbar">
+      <div class="links">
+        <a href="#hero" class="active">Home</a>
+        <a href="#about">About Me</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+
+    <section class="hero" id="hero">
+      <img
+        src="hero1.jpg"
+        alt="background image"
+        class="heroimage"
+        style="width: 100%; height: auto"
+      />
+    </section>
+    <section class="content" id="about">
+      <h2>About Me</h2>
+      <p>
+        I am a driven and dynamic model with a foundation in pageantry and a
+        deep appreciation for the art of fashion. My journey into modeling is
+        fueled by a desire to embody elegance, movement, and emotion —
+        transforming vision into striking visual impact.
+      </p>
+      <p>
+        As I continue to grow in the industry, I seek to collaborate with brands
+        that value authenticity, creativity, and purpose. Through curated
+        visuals, behind-the-scenes storytelling, and a thoughtful digital
+        presence, I bring both style and intention to every project — creating
+        lasting impressions and elevating both brand identity and personal
+        expression.
+      </p>
+      <p>
+        I’m here for the brands that aren’t afraid to show something real —
+        something that makes people pause, connect, and truly feel.
+      </p>
+      <a href="about.html" class="button">Read More</a>
+    </section>
+    <section class="content" id="contact">
+      <div class="container">
+        <div class="contact-header">
+          <h2 class="contact-title">Get In Touch</h2>
+          <p class="contact-subtitle">
+            Have a question or want to work together? I'd love to hear from you.
+            Send me a message and I'll respond as soon as possible.
+          </p>
+        </div>
+
+        <div class="contact-content">
+          <div class="contact-info">
+            <div class="info-item">
+              <svg
+                class="info-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              <div class="info-details">
+                <h3>Address</h3>
+                <p>Estonilo Street<br />Balawarte<br />Agoo, La Union</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <svg
+                class="info-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                />
+              </svg>
+              <div class="info-details">
+                <h3>Phone</h3>
+                <p>+63 909 007 3727<br />Mon - Sat, 9am - 6pm</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <svg
+                class="info-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+              <div class="info-details">
+                <h3>Email</h3>
+                <p>mdzdoctolero@gmail.com</p>
+              </div>
+            </div>
+          </div>
+
+          <form class="contact-form">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" required />
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                placeholder="Tell us about your project or inquiry..."
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </body>
+  <script src="script.js"></script>
+</html>
