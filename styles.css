@@ -441,7 +441,7 @@ body {
     overflow: hidden;
   }
   .heroimage {
-    scale: 2.5;
+    scale: 3;
     position: absolute;
     left: 30%;
   }
