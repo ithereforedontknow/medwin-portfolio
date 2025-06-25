@@ -131,7 +131,6 @@ body {
   font-size: 2rem;
 }
 
-/* Demo content */
 .content {
   text-align: center;
   margin: 0 auto;
@@ -157,6 +156,13 @@ body {
   font-weight: 300;
   margin-top: 30px;
   text-align: start;
+}
+#contact {
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .button {
   display: inline-block;
@@ -228,6 +234,53 @@ body {
   max-width: 700px;
   line-height: 1.6;
   font-weight: 300;
+} /* Lazy loading styles */
+.slide {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 400px;
+}
+
+.slide-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.slide-placeholder::before {
+  content: "Loading...";
+  color: #999;
+  font-size: 14px;
+}
+
+.slide.loaded .slide-placeholder {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.slide.loading .slide-placeholder::before {
+  content: "Loading...";
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 .container {
   display: flex;

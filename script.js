@@ -95,3 +95,152 @@ setInterval(() => {
   currentIndex = (currentIndex + 1) % slides.length;
   updateCarousel();
 }, 4000);
+// Lazy loading implementation
+class LazyCarousel {
+  constructor() {
+    this.slides = document.querySelectorAll(".slide[data-bg]");
+    this.loadedImages = new Set();
+    this.currentSlide = 0;
+
+    this.init();
+  }
+
+  init() {
+    // Load the first slide immediately
+    this.loadSlide(0);
+
+    // Preload adjacent slides
+    this.preloadAdjacentSlides();
+
+    // Set up intersection observer for better performance
+    this.setupIntersectionObserver();
+
+    // Set up carousel navigation
+    this.setupCarouselNavigation();
+  }
+
+  loadSlide(index) {
+    if (this.loadedImages.has(index) || !this.slides[index]) return;
+
+    const slide = this.slides[index];
+    const imageSrc = slide.dataset.bg;
+
+    slide.classList.add("loading");
+
+    // Create a new image to preload
+    const img = new Image();
+
+    img.onload = () => {
+      slide.style.backgroundImage = `url('${imageSrc}')`;
+      slide.classList.remove("loading");
+      slide.classList.add("loaded");
+      this.loadedImages.add(index);
+    };
+
+    img.onerror = () => {
+      slide.classList.remove("loading");
+      slide.querySelector(".slide-placeholder").innerHTML =
+        '<span style="color: #999;">Failed to load image</span>';
+    };
+
+    img.src = imageSrc;
+  }
+
+  preloadAdjacentSlides() {
+    const totalSlides = this.slides.length;
+
+    // Load previous and next slides
+    const prevIndex = (this.currentSlide - 1 + totalSlides) % totalSlides;
+    const nextIndex = (this.currentSlide + 1) % totalSlides;
+
+    this.loadSlide(prevIndex);
+    this.loadSlide(nextIndex);
+  }
+
+  setupIntersectionObserver() {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const slideIndex = Array.from(this.slides).indexOf(entry.target);
+            this.loadSlide(slideIndex);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "50px",
+        threshold: 0.1,
+      }
+    );
+
+    this.slides.forEach((slide) => {
+      observer.observe(slide);
+    });
+  }
+
+  setupCarouselNavigation() {
+    const prevBtn = document.querySelector(".btn.prev");
+    const nextBtn = document.querySelector(".btn.next");
+    const dots = document.querySelectorAll(".dot");
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => this.previousSlide());
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => this.nextSlide());
+    }
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => this.goToSlide(index));
+    });
+  }
+
+  previousSlide() {
+    this.currentSlide =
+      (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+    this.updateCarousel();
+  }
+
+  nextSlide() {
+    this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+    this.updateCarousel();
+  }
+
+  goToSlide(index) {
+    this.currentSlide = index;
+    this.updateCarousel();
+  }
+
+  updateCarousel() {
+    // Load current slide and adjacent slides
+    this.loadSlide(this.currentSlide);
+    this.preloadAdjacentSlides();
+
+    // Update active dot
+    const dots = document.querySelectorAll(".dot");
+    dots.forEach((dot, index) => {
+      dot.classList.toggle("active", index === this.currentSlide);
+    });
+
+    // Update carousel position (you might need to adjust this based on your existing carousel logic)
+    const track = document.querySelector(".carousel-track");
+    if (track) {
+      const slideWidth = 100; // Assuming 100% width per slide
+      track.style.transform = `translateX(-${this.currentSlide * slideWidth}%)`;
+    }
+  }
+}
+
+// Initialize lazy carousel when DOM is loaded
+document.addEventListener("DOMContentLoaded", () => {
+  new LazyCarousel();
+});
+
+// Fallback: Initialize if DOMContentLoaded has already fired
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => new LazyCarousel());
+} else {
+  new LazyCarousel();
+}
