@@ -14,7 +14,19 @@
         <a href="about.html" class="active">About Me</a>
         <a href="contact.html">Contact</a>
       </div>
+      <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <button class="close-btn" onclick="toggleMenu()">✕</button>
+      <a href="index.html" onclick="toggleMenu()">Home</a>
+      <a href="about.html" class="active" onclick="toggleMenu()">About Me</a>
+      <a href="contact.html" onclick="toggleMenu()">Contact</a>
+    </div>
 
     <h2 class="about-me-title">About Me</h2>
     <div class="about-me"></div>
@@ -118,6 +130,69 @@
       </div>
     </section>
     <script>
+      function toggleMenu() {
+        const hamburger = document.querySelector(".hamburger");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        hamburger.classList.toggle("active");
+        mobileMenu.classList.toggle("active");
+
+        // Prevent body scroll when menu is open
+        if (mobileMenu.classList.contains("active")) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "auto";
+        }
+      }
+
+      // Close menu when clicking on a link
+      document.querySelectorAll(".mobile-menu a").forEach((link) => {
+        link.addEventListener("click", () => {
+          toggleMenu();
+        });
+      });
+
+      // Handle active state for navigation
+      document.querySelectorAll('a[href^="#"]').forEach((link) => {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          // Remove active class from all links
+          document
+            .querySelectorAll(".navbar a, .mobile-menu a")
+            .forEach((a) => {
+              a.classList.remove("active");
+            });
+
+          // Add active class to clicked link and its counterpart
+          const href = this.getAttribute("href");
+          document.querySelectorAll(`a[href="${href}"]`).forEach((a) => {
+            a.classList.add("active");
+          });
+
+          // Smooth scroll to section
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth" });
+          }
+        });
+      });
+
+      // Hide navbar on scroll down, show on scroll up
+      let lastScrollTop = 0;
+      window.addEventListener("scroll", function () {
+        let scrollTop =
+          window.pageYOffset || document.documentElement.scrollTop;
+        const navbar = document.querySelector(".navbar");
+
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+          navbar.classList.add("hide");
+        } else {
+          navbar.classList.remove("hide");
+        }
+        lastScrollTop = scrollTop;
+      });
+
       // Enhanced scroll effect with auto-hide functionality
       let lastScrollY = 0;
       let ticking = false;
