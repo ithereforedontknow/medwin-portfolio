@@ -688,6 +688,17 @@ body {
 .dot.active {
   background-color: #fff;
 }
+.behind-the-scenes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.behind-the-scenes video {
+  margin: 40px 20px;
+  width: 30%;
+  height: auto;
+  border-radius: 15px;
+}
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
@@ -696,6 +707,16 @@ body {
     margin: 10px 0;
     width: calc(100% - 30px);
     max-width: none;
+    border-radius: 15px;
+  }
+  .title1,
+  .title2 {
+    display: none;
+  }
+  .behind-the-scenes video {
+    margin: 40px 20px 0 20px;
+    width: 100%;
+    height: auto;
     border-radius: 15px;
   }
 
