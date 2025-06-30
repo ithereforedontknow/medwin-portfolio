@@ -715,7 +715,7 @@ body {
   }
   .behind-the-scenes video {
     margin: 40px 20px 0 20px;
-    width: 100%;
+    width: 40%;
     height: auto;
     border-radius: 15px;
   }
@@ -814,7 +814,16 @@ body {
     margin: 10px 0;
     width: calc(100% - 20px);
   }
-
+  .title1,
+  .title2 {
+    display: none;
+  }
+  .behind-the-scenes video {
+    margin: 40px 20px 0 20px;
+    width: 40%;
+    height: auto;
+    border-radius: 15px;
+  }
   .mobile-menu a {
     font-size: 2rem;
     margin: 15px 0;
