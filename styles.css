@@ -775,6 +775,9 @@ body {
     margin: 0 auto;
     padding: 0 16px;
   }
+  #contact {
+    margin-top: 150px;
+  }
   .intro-overlay {
     display: flex;
   }
