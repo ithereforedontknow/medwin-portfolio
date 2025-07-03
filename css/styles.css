@@ -366,7 +366,7 @@ body {
 
 .about-me {
   height: 100svh;
-  background-image: url("about.jpg");
+  background-image: url("../assets/about.jpg");
   background-size: cover;
   background-position: top;
   background-attachment: fixed;
