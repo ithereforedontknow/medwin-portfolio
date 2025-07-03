@@ -568,9 +568,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Smooth scroll for modal content
-  galleryGrid.addEventListener("wheel", (e) => {
-    e.preventDefault();
-    galleryGrid.scrollLeft += e.deltaY;
-  });
+  // // Smooth scroll for modal content
+  // galleryGrid.addEventListener("wheel", (e) => {
+  //   e.preventDefault();
+  //   galleryGrid.scrollLeft += e.deltaY;
+  // });
 });
