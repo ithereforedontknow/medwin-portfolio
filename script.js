@@ -59,205 +59,149 @@ function requestTick() {
 
 window.addEventListener("scroll", requestTick);
 // Enhanced form handling with AJAX submission
-//
-const track = document.querySelector(".carousel-track");
-const slides = document.querySelectorAll(".slide");
-const prevBtn = document.querySelector(".prev");
-const nextBtn = document.querySelector(".next");
-const dots = document.querySelectorAll(".dot");
+document.addEventListener("DOMContentLoaded", function () {
+  const track = document.querySelector(".gallery-track");
+  const slides = Array.from(track.children);
 
-let currentIndex = 0;
+  // Clone slides for infinite effect
+  slides.forEach((slide) => {
+    const clone = slide.cloneNode(true);
+    track.appendChild(clone);
+  });
 
-function updateCarousel() {
-  track.style.transform = `translateX(-${currentIndex * 100}%)`;
-  dots.forEach((dot) => dot.classList.remove("active"));
-  dots[currentIndex].classList.add("active");
-}
-
-nextBtn.addEventListener("click", () => {
-  currentIndex = (currentIndex + 1) % slides.length;
-  updateCarousel();
-});
-
-prevBtn.addEventListener("click", () => {
-  currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-  updateCarousel();
-});
-
-dots.forEach((dot, index) => {
-  dot.addEventListener("click", () => {
-    currentIndex = index;
-    updateCarousel();
+  // Preload images
+  const images = document.querySelectorAll(".slide img");
+  images.forEach((img) => {
+    if (img.complete) {
+      img.style.opacity = 1;
+    } else {
+      img.addEventListener("load", () => {
+        img.style.opacity = 1;
+      });
+      img.style.opacity = 0;
+      img.style.transition = "opacity 0.5s ease";
+    }
   });
 });
-
-setInterval(() => {
-  currentIndex = (currentIndex + 1) % slides.length;
-  updateCarousel();
-}, 4000);
-// Lazy loading implementation
-// Optimized carousel with lazy loading and better performance
-class OptimizedCarousel {
+// Enhanced Lazy Loading Controller
+class LazyLoader {
   constructor() {
-    this.track = document.querySelector(".carousel-track");
-    this.slides = document.querySelectorAll(".slide");
-    this.prevBtn = document.querySelector(".prev");
-    this.nextBtn = document.querySelector(".next");
-    this.dots = document.querySelectorAll(".dot");
-
-    this.currentIndex = 0;
-    this.loadedImages = new Set();
-    this.isTransitioning = false;
-    this.autoPlayInterval = null;
-
+    this.lazyMedia = document.querySelectorAll('[loading="lazy"], [data-lazy]');
+    this.observer = null;
     this.init();
   }
 
   init() {
-    if (!this.track || !this.slides.length) return;
-
-    // Load first image immediately
-    this.loadImage(0);
-
-    // Preload next image
-    this.loadImage(1);
-
-    this.setupEventListeners();
-    this.startAutoPlay();
-    this.setupIntersectionObserver();
-  }
-
-  loadImage(index) {
-    if (this.loadedImages.has(index) || !this.slides[index]) return;
-
-    const slide = this.slides[index];
-    const imageSrc = slide.dataset.bg;
-
-    if (!imageSrc) return;
-
-    const img = new Image();
-
-    img.onload = () => {
-      slide.style.backgroundImage = `url('${imageSrc}')`;
-      slide.classList.add("loaded");
-      this.loadedImages.add(index);
-    };
-
-    img.onerror = () => {
-      console.warn(`Failed to load image: ${imageSrc}`);
-    };
-
-    img.src = imageSrc;
-  }
-
-  setupEventListeners() {
-    // Navigation buttons
-    this.prevBtn?.addEventListener("click", () => this.previousSlide());
-    this.nextBtn?.addEventListener("click", () => this.nextSlide());
-
-    // Dots navigation
-    this.dots.forEach((dot, index) => {
-      dot.addEventListener("click", () => this.goToSlide(index));
-    });
-
-    // Pause auto-play on hover
-    this.track.addEventListener("mouseenter", () => this.pauseAutoPlay());
-    this.track.addEventListener("mouseleave", () => this.startAutoPlay());
-
-    // Handle visibility change
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        this.pauseAutoPlay();
-      } else {
-        this.startAutoPlay();
-      }
-    });
+    // Check if IntersectionObserver is supported
+    if ("IntersectionObserver" in window) {
+      this.setupIntersectionObserver();
+    } else {
+      this.loadAllMedia(); // Fallback for older browsers
+    }
   }
 
   setupIntersectionObserver() {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            this.startAutoPlay();
-          } else {
-            this.pauseAutoPlay();
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
+    const options = {
+      root: null,
+      rootMargin: "200px", // Start loading when 200px away from viewport
+      threshold: 0.01,
+    };
 
-    observer.observe(this.track);
-  }
-
-  updateCarousel() {
-    if (this.isTransitioning) return;
-
-    this.isTransitioning = true;
-
-    // Update transform with hardware acceleration
-    requestAnimationFrame(() => {
-      this.track.style.transform = `translate3d(-${
-        this.currentIndex * 100
-      }%, 0, 0)`;
-
-      // Update dots
-      this.dots.forEach((dot, index) => {
-        dot.classList.toggle("active", index === this.currentIndex);
+    this.observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          this.loadMedia(entry.target);
+          observer.unobserve(entry.target);
+        }
       });
+    }, options);
 
-      // Preload adjacent images
-      this.preloadAdjacentImages();
-
-      // Reset transition flag after animation
-      setTimeout(() => {
-        this.isTransitioning = false;
-      }, 500);
+    // Observe all lazy elements
+    this.lazyMedia.forEach((media) => {
+      this.observer.observe(media);
     });
   }
 
-  preloadAdjacentImages() {
-    const totalSlides = this.slides.length;
-    const prevIndex = (this.currentIndex - 1 + totalSlides) % totalSlides;
-    const nextIndex = (this.currentIndex + 1) % totalSlides;
-
-    this.loadImage(prevIndex);
-    this.loadImage(nextIndex);
-  }
-
-  nextSlide() {
-    this.currentIndex = (this.currentIndex + 1) % this.slides.length;
-    this.updateCarousel();
-  }
-
-  previousSlide() {
-    this.currentIndex =
-      (this.currentIndex - 1 + this.slides.length) % this.slides.length;
-    this.updateCarousel();
-  }
-
-  goToSlide(index) {
-    if (index === this.currentIndex) return;
-    this.currentIndex = index;
-    this.updateCarousel();
-  }
-
-  startAutoPlay() {
-    this.pauseAutoPlay(); // Clear existing interval
-    this.autoPlayInterval = setInterval(() => {
-      this.nextSlide();
-    }, 4000);
-  }
-
-  pauseAutoPlay() {
-    if (this.autoPlayInterval) {
-      clearInterval(this.autoPlayInterval);
-      this.autoPlayInterval = null;
+  loadMedia(element) {
+    if (element.tagName === "IMG") {
+      this.loadImage(element);
+    } else if (element.tagName === "VIDEO") {
+      this.loadVideo(element);
+    } else if (element.tagName === "IFRAME") {
+      this.loadIframe(element);
     }
+  }
+
+  loadImage(img) {
+    // Skip if already loaded
+    if (img.dataset.loaded === "true") return;
+
+    // Show placeholder while loading
+    img.style.opacity = "0";
+    img.style.transition = "opacity 0.5s ease";
+
+    // Load the image
+    const src = img.dataset.src || img.src;
+    const tempImg = new Image();
+
+    tempImg.onload = () => {
+      img.src = src;
+      img.style.opacity = "1";
+      img.dataset.loaded = "true";
+
+      // Handle responsive images
+      if (img.dataset.srcset) {
+        img.srcset = img.dataset.srcset;
+      }
+    };
+
+    tempImg.onerror = () => {
+      console.error("Failed to load image:", src);
+      // You could show a fallback image here
+    };
+
+    tempImg.src = src;
+  }
+
+  loadVideo(video) {
+    if (video.dataset.loaded === "true") return;
+
+    const sources = video.querySelectorAll("source");
+    sources.forEach((source) => {
+      const src = source.dataset.src;
+      if (src) {
+        source.src = src;
+      }
+    });
+
+    video.load();
+    video.dataset.loaded = "true";
+
+    // For autoplay videos, mute them to comply with browser policies
+    if (video.autoplay) {
+      video.muted = true;
+    }
+  }
+
+  loadIframe(iframe) {
+    if (iframe.dataset.loaded === "true") return;
+
+    iframe.src = iframe.dataset.src;
+    iframe.dataset.loaded = "true";
+  }
+
+  loadAllMedia() {
+    // Fallback for browsers without IntersectionObserver
+    this.lazyMedia.forEach((media) => {
+      this.loadMedia(media);
+    });
   }
 }
 
+// Initialize when DOM is ready
+document.addEventListener("DOMContentLoaded", () => {
+  new LazyLoader();
+});
 // Optimized navbar scroll handling
 class NavbarController {
   constructor() {
@@ -345,7 +289,6 @@ class NavbarController {
 
 // Initialize when DOM is ready
 function initializeComponents() {
-  new OptimizedCarousel();
   new NavbarController();
 }
 

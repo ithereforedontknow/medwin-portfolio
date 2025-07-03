@@ -622,71 +622,43 @@ body {
 .submit-btn:active {
   transform: translateY(1px);
 }
-.carousel-section {
-  padding: 40px 0;
-}
-
-.carousel {
+.scrolling-gallery {
   position: relative;
-  width: 90%;
-  max-width: 1200px;
-  margin: auto;
+  margin: 40px auto;
   overflow: hidden;
-  border-radius: 15px;
 }
 
-.carousel-track {
+.gallery-track {
   display: flex;
-  transition: transform 0.5s ease-in-out;
+  animation: scroll 30s linear infinite;
+  width: calc(200% + 20px);
 }
 
 .slide {
-  min-width: 100%;
-  height: 1600px;
-  background-size: cover;
-  background-position: center;
+  height: 600px;
+  margin-right: 10px;
+  flex-shrink: 0;
+  overflow: hidden;
 }
 
-.carousel-buttons {
-  position: absolute;
-  top: 50%;
+.slide img {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  transform: translateY(-50%);
-  padding: 0 20px;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
-.btn {
-  background: rgba(0, 0, 0, 0.5);
-  border: none;
-  color: #fff;
-  font-size: 2rem;
-  cursor: pointer;
-  padding: 10px 20px;
-  border-radius: 50%;
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - 10px));
+  }
 }
 
-.carousel-dots {
-  position: absolute;
-  bottom: 15px;
-  width: 100%;
-  text-align: center;
-}
-
-.dot {
-  height: 12px;
-  width: 12px;
-  margin: 0 5px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.3s;
-  cursor: pointer;
-}
-
-.dot.active {
-  background-color: #fff;
+.scrolling-gallery:hover .gallery-track {
+  animation-play-state: paused;
 }
 .behind-the-scenes {
   display: flex;
@@ -702,6 +674,26 @@ body {
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
+  .scrolling-gallery {
+    width: 95%;
+    margin: 20px auto;
+  }
+
+  .slide {
+    min-width: calc(33.333% - 10px); /* Show 3 slides at a time on mobile */
+    height: 200px; /* Reduced height for mobile */
+  }
+
+  /* Optional: Make the animation slower on mobile */
+  .gallery-track {
+    animation: scroll 10s linear infinite;
+  }
+
+  /* Adjust the behind-the-scenes videos for mobile */
+  .behind-the-scenes video {
+    width: 45%; /* Slightly larger than before */
+    margin: 20px 10px;
+  }
   .navbar {
     padding: 12px 20px;
     margin: 10px 0;
@@ -809,6 +801,26 @@ body {
   }
 }
 @media (max-width: 480px) {
+  .scrolling-gallery {
+    width: 95%;
+    margin: 20px auto;
+  }
+
+  .slide {
+    min-width: calc(33.333% - 10px); /* Show 3 slides at a time on mobile */
+    height: 200px; /* Reduced height for mobile */
+  }
+
+  /* Optional: Make the animation slower on mobile */
+  .gallery-track {
+    animation: scroll 10s linear infinite;
+  }
+
+  /* Adjust the behind-the-scenes videos for mobile */
+  .behind-the-scenes video {
+    width: 45%; /* Slightly larger than before */
+    margin: 20px 10px;
+  }
   .navbar {
     padding: 10px 15px;
     margin: 10px 0;
