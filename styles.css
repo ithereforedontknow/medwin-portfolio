@@ -666,8 +666,8 @@ body {
   align-items: center;
 }
 .behind-the-scenes video {
-  margin: 40px 20px;
-  width: 30%;
+  margin: 10px 20px 0;
+  width: 20%;
   height: auto;
   border-radius: 15px;
 }
