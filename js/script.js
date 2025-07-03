@@ -412,3 +412,165 @@ window.addEventListener("scroll", function () {
   }
   lastScrollTop = scrollTop;
 });
+// Update your script.js with this gallery functionality
+document.addEventListener("DOMContentLoaded", function () {
+  // Gallery Modal Functionality
+  const galleryModal = document.getElementById("galleryModal");
+  const enlargedModal = document.getElementById("enlargedModal");
+  const galleryGrid = document.querySelector(".gallery-grid");
+  const enlargedImage = document.getElementById("enlargedImage");
+  const viewGalleryBtn = document.querySelector(".carousel-section .button");
+  const closeModal = document.querySelector(".close-modal");
+  const closeEnlarged = document.querySelector(".close-enlarged");
+  const prevBtn = document.querySelector(".prev-btn");
+  const nextBtn = document.querySelector(".next-btn");
+  const modalOverlay = document.querySelector(".modal-overlay");
+  const enlargedOverlay = document.querySelector(".enlarged-overlay");
+
+  let currentImageIndex = 0;
+  let galleryImages = [];
+
+  // Get all images from the carousel
+  function getCarouselImages() {
+    const slides = document.querySelectorAll(".gallery-track .slide img");
+    return Array.from(slides).map((slide) => ({
+      src: slide.src,
+      alt: slide.alt,
+    }));
+  }
+
+  // Open gallery modal with elegant animation
+  viewGalleryBtn.addEventListener("click", () => {
+    galleryModal.style.display = "block";
+    setTimeout(() => {
+      galleryModal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }, 10);
+
+    // Clear previous images
+    galleryGrid.innerHTML = "";
+
+    // Get images and create gallery
+    galleryImages = getCarouselImages();
+    galleryImages.forEach((img, index) => {
+      const imgContainer = document.createElement("div");
+      imgContainer.className = "gallery-item";
+
+      const imgElement = document.createElement("img");
+      imgElement.src = img.src;
+      imgElement.alt = img.alt;
+      imgElement.loading = "lazy";
+
+      // Add loading animation
+      imgElement.style.opacity = "0";
+      imgElement.style.transform = "translateY(20px)";
+      imgElement.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+
+      imgElement.addEventListener("load", () => {
+        imgElement.style.opacity = "1";
+        imgElement.style.transform = "translateY(0)";
+      });
+
+      imgElement.addEventListener("click", () => openEnlargedView(index));
+      imgContainer.appendChild(imgElement);
+      galleryGrid.appendChild(imgContainer);
+    });
+  });
+
+  // Close gallery modal
+  function closeGalleryModal() {
+    galleryModal.classList.remove("active");
+    setTimeout(() => {
+      galleryModal.style.display = "none";
+      document.body.style.overflow = "auto";
+    }, 400);
+  }
+
+  closeModal.addEventListener("click", closeGalleryModal);
+  modalOverlay.addEventListener("click", closeGalleryModal);
+
+  // Open enlarged view with smooth transition
+  function openEnlargedView(index) {
+    currentImageIndex = index;
+    enlargedImage.src = galleryImages[index].src;
+    enlargedImage.alt = galleryImages[index].alt;
+
+    // Reset image style for animation
+    enlargedImage.style.opacity = "0";
+    enlargedImage.style.transform = "scale(0.9)";
+
+    enlargedModal.style.display = "block";
+    setTimeout(() => {
+      enlargedModal.classList.add("active");
+      enlargedImage.style.opacity = "1";
+      enlargedImage.style.transform = "scale(1)";
+    }, 10);
+  }
+
+  // Close enlarged view
+  function closeEnlargedModal() {
+    enlargedModal.classList.remove("active");
+    setTimeout(() => {
+      enlargedModal.style.display = "none";
+    }, 400);
+  }
+
+  closeEnlarged.addEventListener("click", closeEnlargedModal);
+  enlargedOverlay.addEventListener("click", closeEnlargedModal);
+
+  // Navigation in enlarged view
+  prevBtn.addEventListener("click", () => {
+    navigateImages(-1);
+  });
+
+  nextBtn.addEventListener("click", () => {
+    navigateImages(1);
+  });
+
+  function navigateImages(direction) {
+    // Add transition out effect
+    enlargedImage.style.opacity = "0";
+    enlargedImage.style.transform = `scale(${direction > 0 ? 0.9 : 1.1})`;
+
+    setTimeout(() => {
+      currentImageIndex =
+        (currentImageIndex + direction + galleryImages.length) %
+        galleryImages.length;
+      enlargedImage.src = galleryImages[currentImageIndex].src;
+      enlargedImage.alt = galleryImages[currentImageIndex].alt;
+
+      // Transition in effect
+      enlargedImage.style.opacity = "0";
+      enlargedImage.style.transform = `scale(${direction > 0 ? 1.1 : 0.9})`;
+
+      setTimeout(() => {
+        enlargedImage.style.opacity = "1";
+        enlargedImage.style.transform = "scale(1)";
+      }, 20);
+    }, 300);
+  }
+
+  // Keyboard navigation
+  document.addEventListener("keydown", (e) => {
+    if (enlargedModal.classList.contains("active")) {
+      if (e.key === "ArrowLeft") {
+        prevBtn.click();
+      } else if (e.key === "ArrowRight") {
+        nextBtn.click();
+      } else if (e.key === "Escape") {
+        closeEnlargedModal();
+      }
+    } else if (
+      galleryModal.classList.contains("active") &&
+      e.key === "Escape"
+    ) {
+      closeGalleryModal();
+    }
+  });
+
+  // Smooth scroll for modal content
+  galleryGrid.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    galleryGrid.scrollLeft += e.deltaY;
+  });
+});
